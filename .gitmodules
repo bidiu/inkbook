@@ -1,0 +1,6 @@
+[submodule "ink-react"]
+	path = ink-react
+	url = https://github.com/bidiu/ink-react.git
+[submodule "ink-api"]
+	path = ink-api
+	url = https://github.com/bidiu/ink-api.git
