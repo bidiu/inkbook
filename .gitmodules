@@ -4,3 +4,6 @@
 [submodule "ink-api"]
 	path = ink-api
 	url = https://github.com/bidiu/ink-api.git
+[submodule "ink-database"]
+	path = ink-database
+	url = https://github.com/bidiu/ink-database.git
