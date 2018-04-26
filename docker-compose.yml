@@ -1,0 +1,62 @@
+version: '3.1'
+
+services:
+  # ink mysql server
+  ink_database_dev:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/ink_db_passwd
+      - MYSQL_USER=sunhe
+      - MYSQL_PASSWORD_FILE=/run/secrets/ink_db_passwd
+      - MYSQL_DATABASE=ink_dev
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'ink_db_volume_dev:/var/lib/mysql'
+      - './ink-database/etc/mysql:/etc/mysql'
+    secrets:
+      - ink_db_passwd
+
+  # ink api server
+  ink_api_dev:
+    build:
+      context: ./ink-api
+    image: ink-api:dev
+    ports:
+      - '3000:3000'
+      # export debugging port, you can also debug remotely
+      - '9229:9229'
+    volumes:
+      # mount the src dir into container, so you can do live editing
+      - './ink-api:/usr/src/app'
+    depends_on:
+      - ink_database_dev
+    secrets:
+      - ink_db_passwd
+      - ink_api_pri_key
+      - ink_api_pub_key
+  
+  # the web app
+  ink_app_dev:
+    build:
+      context: ./ink-react
+    image: ink-react:dev
+    ports:
+      - '4200:3000'
+    volumes:
+      # mount the src dir into container, so you can do live editing
+      - './ink-react:/usr/src/app'
+    depends_on:
+      - ink_api_dev
+
+volumes:
+  # used by mysql server
+  ink_db_volume_dev:
+
+secrets:
+  ink_db_passwd:
+    file: .ink_db_passwd
+  ink_api_pri_key:
+    file: .ink_api_private.pem
+  ink_api_pub_key:
+    file: .ink_api_public.pem
