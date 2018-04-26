@@ -1,0 +1,9 @@
+# common
+.DS_Store
+*~
+*.swp
+*.swo
+
+.ink_db_passwd
+.ink_api_private.pem
+.ink_api_public.pem
